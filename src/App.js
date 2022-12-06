@@ -9,49 +9,55 @@ import * as yup from 'yup';
 let schema = yup.object().shape({
   name: yup.string().required(),
   // age: yup.number().required().positive().integer(),
-  // email: yup.string().email(),
-  // website: yup.string().url(),
+  email: yup.string().required().email(),
+//  number: yup.number().max(20) // highest length
+    number: yup.string().required().max(3) // max is 3 char.
+// website: yup.string().url(),
   // createdOn: yup.date().default(function () {
   //   return new Date();
   // }),
 });
 
 
-// check validity
-
-
-// you can try and type cast objects to the defined schema
-// schema.cast({
-//   name: 'jimmy',
-//   age: '24',
-//   createdOn: '2014-09-23T19:25:25Z',
-// });  
+  
 export default function BasicTextFields() {
   
-
-// Form Handler
+// Form Submit Handler
   const save = (event) => {
   event.preventDefault();
-  alert(`name: ${name}, email: ${email}, Phone: ${tel}, Favorite Number: ${number}`)
+    schema.isValid({
+      name: name,
+      email: email,
+      number: number
+      }).then(function(valid){
+        if(valid){
+          alert(`name!: ${name}, email: ${email}, Phone: ${tel}, Favorite Number: ${number}`)
+        }else{
+          alert('nope')
+        }
+      }).catch(function(){
+        console.log('whatever')
+      })
+
 }
 
 // Name Field
-const [name, setName] = useState()
+const [name, setName] = useState('')
 const onNameChange = (e) => {
   setName(e.target.value)
 }
 
-const [email, setEmail] = useState()
+const [email, setEmail] = useState('')
 const onEmailChange = (e) => {
   setEmail(e.target.value)
 }
 
-const [tel, setTel] = useState()
+const [tel, setTel] = useState('')
 const onTelChange = (e) => {
   setTel(e.target.value)
 }
 
-const [number, setNumber] = useState()
+const [number, setNumber] = useState('')
 const onNumberChange = (e) => {
   setNumber(e.target.value)
 }
