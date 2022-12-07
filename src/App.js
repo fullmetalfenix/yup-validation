@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -24,6 +24,14 @@ let schema = yup.object().shape({
 
 export default function BasicTextFields() {
 
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  // const telRef = useRef(null); // dont need, not validating - would need if actually submitting a form though
+  const numberRef = useRef(null);
+
+  const [validationResults, setValidationResults] = useState([]);
+
+
   // Form Submit Handler
   const save = (event) => {
     event.preventDefault();
@@ -31,9 +39,9 @@ export default function BasicTextFields() {
       await schema
         .validate(
           {
-            name: name,
-            email: email,
-            number: number,
+            name: nameRef.current.value,
+            email: emailRef.current.value,
+            number: numberRef.current.value,
           },
           { abortEarly: false, context: object } // returns context object of just what was in Schema. ex: no phone in this case
         ).then(validInfo => {
@@ -53,36 +61,9 @@ export default function BasicTextFields() {
     validateNestedSchema()
   };
 
-  // Name Field
-  const [name, setName] = useState("");
-  const onNameChange = (e) => {
-    setName(e.target.value);
-  };
 
-  const [email, setEmail] = useState("");
-  const onEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
 
-  const [tel, setTel] = useState("");
-  const onTelChange = (e) => {
-    setTel(e.target.value);
-  };
 
-  const [number, setNumber] = useState("");
-  const onNumberChange = (e) => {
-    setNumber(e.target.value);
-  };
-
-  const [validationResults, setValidationResults] = useState([]);
-
-  // schema
-  //   .isValid({
-  //     name: name
-  //   })
-  //   .then(function (valid) {
-  //     valid; // => true
-  //   });
 
   return (
     <Box
@@ -117,35 +98,31 @@ export default function BasicTextFields() {
         id="basic-form"
       >
         <TextField
+          inputRef={nameRef} // NOT ref - inputRef in MUI
           id="name"
           label="Name"
           variant="standard"
-          value={name}
-          onChange={onNameChange}
+
         />
         <TextField
+          inputRef={emailRef} // NOT ref - inputRef in MUI
           id="email"
           label="Email"
           type="email"
           variant="standard"
-          value={email}
-          onChange={onEmailChange}
         />
         <TextField
           id="tel"
           label="Phone Number"
           type="tel"
           variant="standard"
-          value={tel}
-          onChange={onTelChange}
         />
         <TextField
+          inputRef={numberRef} // NOT ref - inputRef in MUI
           id="number"
           label="Favorite Number"
           type="number"
           variant="standard"
-          value={number}
-          onChange={onNumberChange}
         />
         <Button
           type="submit"
